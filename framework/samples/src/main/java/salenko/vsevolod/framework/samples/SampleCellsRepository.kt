@@ -9,9 +9,9 @@ import kotlin.random.Random
 
 class SampleCellsRepository : CellsRepository {
 
-    private val randTest by lazy { Random.Default }
+    private val random by lazy { Random(System.currentTimeMillis()) }
     private val testNames by lazy {
-        listOf<String>(
+        listOf(
             "Audi",
             "fun nickname",
             "very very very long name",
@@ -26,7 +26,7 @@ class SampleCellsRepository : CellsRepository {
     }
 
     private val testPicURL by lazy {
-        listOf<String>(
+        listOf(
             "https://i1.sndcdn.com/artworks-000198393770-vdcdsj-t240x240.jpg",
             "https://media.cntraveler.com/photos/5f15986ca107fd1a0223ddde/16:9/w_2560%2Cc_limit/MaineAcadiaNationalPark-2020-GettyImages-1065259808.jpg",
             "https://img.freepik.com/premium–vector/austrian–black–tan-hound-dog-watercolor-sketch-hand-drawn-illustration_633389-37.jpg",
@@ -42,8 +42,8 @@ class SampleCellsRepository : CellsRepository {
 
     override suspend fun getCells(): Result<List<Cell>> =
         withContext(Dispatchers.IO) {
-            delay(randTest.nextLong(1, 10) * 1000)
-            if (randTest.nextBoolean()) {
+            delay(random.nextLong(1, 10) * 1000)
+            if (random.nextBoolean()) {
                 val arrayList = ArrayList<Cell>()
                 for (i in 1..testPicURL.size) {
                     arrayList.add(generateCell())
@@ -58,7 +58,7 @@ class SampleCellsRepository : CellsRepository {
         }
 
     private fun generateCell() = Cell(
-        testNames[randTest.nextInt(testNames.size)],
-        testPicURL[randTest.nextInt(testPicURL.size)]
+        testNames[random.nextInt(testNames.size)],
+        testPicURL[random.nextInt(testPicURL.size)]
     )
 }
