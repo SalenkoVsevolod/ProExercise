@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
 }
 
@@ -10,11 +10,8 @@ android {
         minSdk rootProject.ext.minSdkVersion
         targetSdk rootProject.ext.targetSdkVersion
 
-        applicationId "salenko.vsevolod.proexercise"
-        versionCode 1
-        versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -33,23 +30,12 @@ android {
 }
 
 dependencies {
-    implementation project(':domain:entity')
-    implementation project(':domain:interactor')
-    implementation project(':domain:repositories')
-
-    implementation project(':framework:retrofit')
-    implementation project(':framework:samples')
-
-    implementation project(':presentation:ui:cells_list')
-    implementation project(':presentation:ui:cell_details')
-    implementation project(':presentation:view_models')
     implementation project(':presentation:common_ui')
+    implementation project(':presentation:view_models')
 
-    implementation "io.insert-koin:koin-android:$koinVersion"
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

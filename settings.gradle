@@ -13,4 +13,17 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "ProExercise"
+
+include ':domain:entity'
+include ':domain:interactor'
+include ':domain:repositories'
+
+include ':framework:retrofit'
+include ':framework:samples'
+
+include ':presentation:ui:cells_list'
+include ':presentation:ui:cell_details'
+include ':presentation:view_models'
+include ':presentation:common_ui'
+
 include ':app'
