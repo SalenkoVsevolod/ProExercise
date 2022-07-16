@@ -5,6 +5,8 @@ import salenko.vsevolod.domain.repositories.CellsRepository
 
 object Koin {
     val retrofitModule = module {
-        single<CellsRepository> { RetrofitCellsRepository() }
+        single { HttpClientBuilder.getClient() }
+        single { RetrofitBuilder.getRetrofitClient(httpClient = get(), url = get()) }
+        single<CellsRepository> { RetrofitCellsRepository(api = get()) }
     }
 }
