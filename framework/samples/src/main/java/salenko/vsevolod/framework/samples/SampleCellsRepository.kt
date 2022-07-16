@@ -45,7 +45,7 @@ class SampleCellsRepository : CellsRepository {
 
     override suspend fun getCells(): Result<List<Cell>> =
         withContext(Dispatchers.IO) {
-            delay(random.nextLong(1, 10) * 1000)
+            delay(random.nextLong(1, 5) * 1000)
             if (random.nextBoolean()) {
                 val arrayList = ArrayList<Cell>()
                 for (i in 1..testPicURL.size) {
