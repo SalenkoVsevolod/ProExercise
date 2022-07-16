@@ -9,15 +9,24 @@ sealed interface SingleDataViewModelState<T> {
     fun isLoading() =
         this is Loading
 
+    fun isError() =
+        this is Error
+
     fun getErrorOrNull() =
         if (this is Error) {
             error
         } else null
 
+    fun getErrorTextOrNull() =
+        getErrorOrNull()?.stackTraceToString()
+
     fun getDataOrNull() =
         if (this is Data) {
             data
         } else null
+
+    fun hasData() =
+        this is Data
 }
 
 fun <T> Result<T>.toSingleDataViewModelState(supportEmptyResult: Boolean = false): SingleDataViewModelState<T> =
