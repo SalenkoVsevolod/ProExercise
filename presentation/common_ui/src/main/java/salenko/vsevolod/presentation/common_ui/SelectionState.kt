@@ -2,13 +2,19 @@ package salenko.vsevolod.presentation.common_ui
 
 sealed interface SelectionState {
     object Nothing : SelectionState
-    class Initial(val cell: SelectableCell) : SelectionState
-    class Input(val cell: SelectableCell) : SelectionState
+    class Initial(val selectedCell: SelectableCell) : SelectionState
+    class Input(val selectedCell: SelectableCell) : SelectionState
 
     fun selectedCellOrNull() =
         when (this) {
-            is Initial -> cell
-            is Input -> cell
+            is Initial -> selectedCell
+            is Input -> selectedCell
             Nothing -> null
         }
+
+    fun selectedCellTextOrNull() =
+        selectedCellOrNull()?.cell?.name
+
+    fun selectedCellImageOrNull() =
+        selectedCellOrNull()?.cell?.imageUrl
 }
