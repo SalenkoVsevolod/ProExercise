@@ -55,3 +55,8 @@ fun bindFabVisibility(fab: FloatingActionButton, flag: Boolean) {
         fab.hide()
     }
 }
+
+@BindingAdapter("setSelected")
+fun bindSelected(view: View, selected: Boolean) {
+    view.isSelected = selected
+}
