@@ -1,5 +1,7 @@
 package salenko.vsevolod.presentation.view_models.base
 
+import android.util.Log
+
 sealed interface SingleDataViewModelState<T> {
     class Empty<T> : SingleDataViewModelState<T>
     class Loading<T> : SingleDataViewModelState<T>
@@ -40,8 +42,10 @@ fun <T> Result<T>.toSingleDataViewModelState(supportEmptyResult: Boolean = false
             }
         }
 
-        isFailure ->
+        isFailure -> {
+            Log.e("pro", "", exceptionOrNull()!!)
             SingleDataViewModelState.Error(exceptionOrNull())
+        }
 
         else -> throw IllegalStateException("not success and not failure result")
     }
