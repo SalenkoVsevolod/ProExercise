@@ -1,8 +1,12 @@
 package salenko.vsevolod.presentation.ui.cells_list
 
 import salenko.vsevolod.entity.entity.Cell
+import salenko.vsevolod.presentation.common_ui.SelectableCell
 
-internal fun List<Cell>.toSelectableCells(): List<SelectableCell> =
+internal fun List<Cell>.toSelectableCells(selectedIndex: Int): List<SelectableCell> =
     mapIndexed { index, cell ->
-        SelectableCell(index, cell, index == 0)
+        cell.toSelectableCells(index, index == selectedIndex)
     }
+
+internal fun Cell.toSelectableCells(id: Int, selected: Boolean = false) =
+    SelectableCell(id = id, cell = this, isSelected = selected)

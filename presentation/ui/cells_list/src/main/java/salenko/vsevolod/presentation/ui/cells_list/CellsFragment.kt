@@ -9,6 +9,10 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import salenko.vsevolod.entity.entity.Cell
+import salenko.vsevolod.presentation.common_ui.CellSelectionListener
+import salenko.vsevolod.presentation.common_ui.SelectableCell
+import salenko.vsevolod.presentation.common_ui.SelectionProvider
+import salenko.vsevolod.presentation.common_ui.SelectionState
 import salenko.vsevolod.presentation.ui.cells_list.databinding.FragmentCellsBinding
 import salenko.vsevolod.presentation.view_models.CellsViewModel
 
@@ -45,12 +49,23 @@ class CellsFragment : Fragment() {
     }
 
     private fun updateCells(cells: List<Cell>) {
-        adapter.submitList(cells.toSelectableCells())
+        val selectedCell = SelectionProvider.selection.value.selectedCellOrNull()
+        val index = if (selectedCell == null) {
+            val defaultSelectedIndex = 0
+            val defaultSelectedCell =
+                cells[defaultSelectedIndex].toSelectableCells(defaultSelectedIndex, true)
+            SelectionProvider.selection.value = SelectionState.Initial(defaultSelectedCell)
+            defaultSelectedIndex
+        } else {
+            selectedCell.id
+        }
+        adapter.submitList(cells.toSelectableCells(index))
     }
 
     internal inner class CellsFragmentInputHandler : CellSelectionListener {
-        override fun onCellSelected(selectableCell: SelectableCell) {
-            //TODO
+
+        override fun onCellSelected(selectedCell: SelectableCell) {
+            SelectionProvider.selection.value = SelectionState.Input(selectedCell)
         }
     }
 }
