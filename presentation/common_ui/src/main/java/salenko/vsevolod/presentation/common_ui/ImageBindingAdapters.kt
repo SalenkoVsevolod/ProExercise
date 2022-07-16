@@ -10,6 +10,6 @@ fun bindImageUrl(imageView: ImageView, url: String) {
     Glide.with(imageView.context)
         .load(url)
         .diskCacheStrategy(DiskCacheStrategy.DATA)
-        .centerInside()
+        .optionalFitCenter()
         .into(imageView)
 }
