@@ -1,5 +1,6 @@
 package salenko.vsevolod.proexercise
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -8,6 +9,7 @@ import kotlinx.coroutines.launch
 import salenko.vsevolod.presentation.common_ui.SelectionProvider
 import salenko.vsevolod.presentation.common_ui.SelectionState
 import salenko.vsevolod.presentation.ui.cell_details.CellDetailsFragment
+import salenko.vsevolod.presentation.ui.cells_list.CellsFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,10 +19,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (savedInstanceState != null) {
-            ignoreFirstInputEvent = true
-        }
-        if (!isTabletLandscape()) {
+        initSelectionMode(savedInstanceState)
+    }
+
+    private fun initSelectionMode(savedInstanceState: Bundle?) {
+        if (isTabletLandscape()) {
+            val displayingDetailsFragment = getDisplayingDetailsFragment()
+            if (displayingDetailsFragment != null) {
+                supportFragmentManager.popBackStack()
+                showCellsFragment()
+            }
+        } else {
+            if (savedInstanceState != null) {
+                ignoreFirstInputEvent = true
+            }
             observeSelection()
         }
     }
@@ -30,29 +42,37 @@ class MainActivity : AppCompatActivity() {
             SelectionProvider.selection.collectLatest { state ->
                 if (!ignoreFirstInputEvent) {
                     if (state is SelectionState.Input) {
-                        showDetailsFragment()
+                        if (getDisplayingDetailsFragment() == null) {
+                            showDetailsFragment()
+                        }
                     }
                 } else {
                     ignoreFirstInputEvent = false
                 }
-
             }
         }
     }
 
     private fun showDetailsFragment() {
-        val alreadyDisplayingDetail =
-            supportFragmentManager.findFragmentByTag(detailsFragmentTag) != null
-        if (!alreadyDisplayingDetail) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, CellDetailsFragment(), detailsFragmentTag)
-                .addToBackStack(detailsFragmentTag)
-                .commit()
-        }
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, CellDetailsFragment(), detailsFragmentTag)
+            .addToBackStack(detailsFragmentTag)
+            .commit()
     }
 
+    private fun showCellsFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, CellsFragment())
+            .commit()
+    }
+
+    private fun getDisplayingDetailsFragment() =
+        supportFragmentManager.findFragmentByTag(detailsFragmentTag)
+
     private fun isTabletLandscape(): Boolean {
-        //TODO
-        return false
+        val configuration = resources.configuration
+        val isTablet = configuration.smallestScreenWidthDp >= 600
+        val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        return isTablet && isLandscape
     }
 }
