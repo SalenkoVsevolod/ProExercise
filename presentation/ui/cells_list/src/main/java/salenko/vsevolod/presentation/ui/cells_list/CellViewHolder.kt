@@ -13,9 +13,7 @@ internal class CellViewHolder(
     fun bind(selectableCell: SelectableCell) {
         binding.cell = selectableCell
         binding.root.setOnClickListener {
-            if (!selectableCell.isSelected) {
-                selectionListener(selectableCell)
-            }
+            selectionListener(selectableCell)
         }
     }
 }

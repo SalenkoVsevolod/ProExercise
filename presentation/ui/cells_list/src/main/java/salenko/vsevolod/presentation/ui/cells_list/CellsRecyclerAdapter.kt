@@ -24,16 +24,18 @@ internal class CellsRecyclerAdapter(private val selectionListener: CellSelection
     private fun onCellSelected(selectedCell: SelectableCell) {
         val data = ArrayList(currentList)
         val previouslySelectedIndex = data.indexOfFirst { it.isSelected }
-        if (previouslySelectedIndex != -1) {
-            val unselected = data[previouslySelectedIndex].run { SelectableCell(id, cell) }
-            data[previouslySelectedIndex] = unselected
-        }
         val newSelectedIndex = data.indexOf(selectedCell)
         val selected = selectedCell.run {
             SelectableCell(id, cell, true)
         }
-        data[newSelectedIndex] = selected
-        submitList(data)
+        if (previouslySelectedIndex != newSelectedIndex) {
+            if (previouslySelectedIndex != -1) {
+                val unselected = data[previouslySelectedIndex].run { SelectableCell(id, cell) }
+                data[previouslySelectedIndex] = unselected
+            }
+            data[newSelectedIndex] = selected
+            submitList(data)
+        }
         selectionListener.onCellSelected(selected)
     }
 }
